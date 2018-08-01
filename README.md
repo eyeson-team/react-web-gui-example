@@ -15,6 +15,9 @@ $ yarn build # build for production
 $ yarn deploy # deploy to github pages (adapt homepage of package.json)
 ```
 
+![Screenshot Desktop](screenshot_desktop.png)
+![Screenshot Mobile](screenshot_mobile.png)
+
 This project was bootstrapped with [Create React App].
 
 [eyeson]: https://eyeson.team/ "eyeson Video Meetings"
