@@ -1,2 +1,13 @@
 .App {
 }
+
+.App-sidebar {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+@media (max-width: 839px) {
+  .App-sidebar {
+    flex-flow: row nowrap;
+  }
+}
