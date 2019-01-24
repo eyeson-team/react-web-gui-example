@@ -2060,6 +2060,11 @@ crypto-browserify@^3.11.0:
     randombytes "^2.0.0"
     randomfill "^1.0.3"
 
+crypto-js@^3.1.9-1:
+  version "3.1.9-1"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.1.9-1.tgz#fda19e761fc077e01ffbfdc6e9fdfc59e8806cd8"
+  integrity sha1-/aGedh/Ad+Af+/3G6f38WeiAbNg=
+
 crypto-random-string@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/crypto-random-string/-/crypto-random-string-1.0.0.tgz#a230f64f568310e1498009940790ec99545bca7e"
@@ -2952,15 +2957,16 @@ extsprintf@^1.2.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
 
-eyeson@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/eyeson/-/eyeson-1.0.0.tgz#8d59067676f57c7064b90f95cace21ff7b06ddb5"
+eyeson@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/eyeson/-/eyeson-1.2.0.tgz#84453b17460eec323d7449596d4ebe8c0e472d0f"
+  integrity sha512-99qzAeVIRVEpIBDOouoAHOCBrqtKhHhvPxTB6gxd2Kc8AsHTRJLv6Mgnf/DknbDQHPkL4Pvng1LFpurmI9/Nnw==
   dependencies:
     actioncable "^5.0.0"
     platform "1.3.5"
-    screenfull "^3.3.1"
-    sip.js "^0.9.2"
-    webrtc-adapter "^6.1.1"
+    screenfull "^3.3.3"
+    sip.js "^0.11.6"
+    webrtc-adapter "^6.4.6"
 
 fast-deep-equal@^1.0.0:
   version "1.1.0"
@@ -5259,10 +5265,6 @@ optionator@^0.8.1, optionator@^0.8.2:
     type-check "~0.3.2"
     wordwrap "~1.0.0"
 
-options@>=0.0.5:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/options/-/options-0.0.6.tgz#ec22d312806bb53e731773e7cdaefcf1c643128f"
-
 original@>=0.0.5:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/original/-/original-1.0.1.tgz#b0a53ff42ba997a8c9cd1fb5daaeb42b9d693190"
@@ -6387,9 +6389,10 @@ rmwc@^1.8.3:
     mutation-observer "^1.0.3"
     prop-types "^15.6.1"
 
-rtcpeerconnection-shim@^1.2.10:
-  version "1.2.13"
-  resolved "https://registry.yarnpkg.com/rtcpeerconnection-shim/-/rtcpeerconnection-shim-1.2.13.tgz#326e316b06e8b96b40f7558c8f582b86dd2c1b46"
+rtcpeerconnection-shim@^1.2.14:
+  version "1.2.15"
+  resolved "https://registry.yarnpkg.com/rtcpeerconnection-shim/-/rtcpeerconnection-shim-1.2.15.tgz#e7cc189a81b435324c4949aa3dfb51888684b243"
+  integrity sha512-C6DxhXt7bssQ1nHb154lqeL0SXz5Dx4RczXZu2Aa/L1NJFnEVDxFwCBo3fqtuljhHIGceg5JKBV4XJ0gW5JKyw==
   dependencies:
     sdp "^2.6.0"
 
@@ -6449,13 +6452,19 @@ schema-utils@^0.3.0:
   dependencies:
     ajv "^5.0.0"
 
-screenfull@^3.3.1:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/screenfull/-/screenfull-3.3.2.tgz#a6adf3b3f5556da812725385880600f5b39fbf25"
+screenfull@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/screenfull/-/screenfull-3.3.3.tgz#8cf7e706aceac2e75131aadcb81b622acfe11d39"
+  integrity sha512-DzYUuXr+OV2BDvYXaYzlYgJd4WXZZ2CW5NFC7Kw6TUCpzXJAx4MwlVD6CH+Mu6fi8rfAQIQfqdFZ4jtDsEkWig==
 
-sdp@^2.6.0, sdp@^2.7.0:
+sdp@^2.6.0:
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/sdp/-/sdp-2.8.0.tgz#8d914a733b1c19b6d8fd36ba6cd2dfbfbd668b8a"
+
+sdp@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/sdp/-/sdp-2.9.0.tgz#2eed2d9c0b26c81ff87593107895c68d6fb9a0a6"
+  integrity sha512-XAVZQO4qsfzVTHorF49zCpkdxiGmPNjA8ps8RcJGtGP3QJ/A8I9/SVg/QnkAFDMXIyGbHZBBFwYBw6WdnhT96w==
 
 select-hose@^2.0.0:
   version "2.0.0"
@@ -6592,11 +6601,12 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
-sip.js@^0.9.2:
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/sip.js/-/sip.js-0.9.2.tgz#50205031fcb863d4f3fe408792b82faf1e32e4f7"
+sip.js@^0.11.6:
+  version "0.11.6"
+  resolved "https://registry.yarnpkg.com/sip.js/-/sip.js-0.11.6.tgz#a5e748307d2b0f1dd9e8f1365893d771a7e72f8e"
+  integrity sha512-ZxD3h6gpT4LYaG3ihFb5U3gOGGz+ObiNnzDgOlyCyu0zXZTqvzGSnfbXwIsGCES/N0z+K4tG21GhWpdUr2F7Ig==
   dependencies:
-    ws "^1.0.1"
+    crypto-js "^3.1.9-1"
   optionalDependencies:
     promiscuous "^0.6.0"
 
@@ -7172,10 +7182,6 @@ uglifyjs-webpack-plugin@^0.4.6:
     uglify-js "^2.8.29"
     webpack-sources "^1.0.1"
 
-ultron@1.0.x:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.0.2.tgz#ace116ab557cd197386a4e88f4685378c8b2e4fa"
-
 union-value@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/union-value/-/union-value-1.0.0.tgz#5c71c34cb5bad5dcebe3ea0cd08207ba5aa1aea4"
@@ -7467,12 +7473,13 @@ webpack@3.8.1:
     webpack-sources "^1.0.1"
     yargs "^8.0.2"
 
-webrtc-adapter@^6.1.1:
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/webrtc-adapter/-/webrtc-adapter-6.3.2.tgz#7e616e27defe31968b22b01b902db0d0e68ae786"
+webrtc-adapter@^6.4.6:
+  version "6.4.8"
+  resolved "https://registry.yarnpkg.com/webrtc-adapter/-/webrtc-adapter-6.4.8.tgz#eeca3f0d5b40c0e629b865ef2a936a0b658274de"
+  integrity sha512-YM8yl545c/JhYcjGHgaCoA7jRK/KZuMwEDFeP2AcP0Auv5awEd+gZE0hXy9z7Ed3p9HvAXp8jdbe+4ESb1zxAw==
   dependencies:
-    rtcpeerconnection-shim "^1.2.10"
-    sdp "^2.7.0"
+    rtcpeerconnection-shim "^1.2.14"
+    sdp "^2.9.0"
 
 websocket-driver@>=0.5.1:
   version "0.7.0"
@@ -7582,13 +7589,6 @@ write@^0.2.1:
   resolved "https://registry.yarnpkg.com/write/-/write-0.2.1.tgz#5fc03828e264cea3fe91455476f7a3c566cb0757"
   dependencies:
     mkdirp "^0.5.1"
-
-ws@^1.0.1:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-1.1.5.tgz#cbd9e6e75e09fc5d2c90015f21f0c40875e0dd51"
-  dependencies:
-    options ">=0.0.5"
-    ultron "1.0.x"
 
 xdg-basedir@^3.0.0:
   version "3.0.0"
