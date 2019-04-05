@@ -99,15 +99,13 @@ class App extends Component {
                   checked={this.state.audio}
                   onClick={this.toggleAudio}
                   label="Toggle audio"
-                  onContent="mic"
-                  offContent="mic_off"
+                  icon={this.state.audio ? 'mic' : 'mic_off'}
                 />
                 <IconButton
                   checked={this.state.video}
                   onClick={this.toggleVideo}
                   label="Toggle video"
-                  onContent="videocam"
-                  offContent="videocam_off"
+                  icon={this.state.video ? 'videocam' : 'videocam_off'}
                 />
               </Fragment>
             )}
