@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.png';
-import {Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle} from 'rmwc/Toolbar';
-import {Button} from 'rmwc/Button';
+import {Toolbar, ToolbarRow, ToolbarSection, ToolbarTitle} from '@rmwc/toolbar';
+import {Button} from '@rmwc/button';
 import './Toolbar.css';
 
 export default ({title}) => (

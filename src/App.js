@@ -1,9 +1,9 @@
 import React, {Component, Fragment} from 'react';
-import {TextField, TextFieldHelperText} from 'rmwc/TextField';
-import {IconButton} from 'rmwc/IconButton';
-import {ThemeProvider} from 'rmwc/Theme';
-import {Grid, GridCell} from 'rmwc/Grid';
-import {LinearProgress} from 'rmwc/LinearProgress';
+import {TextField, TextFieldHelperText} from '@rmwc/textfield';
+import {IconButton} from '@rmwc/icon-button';
+import {ThemeProvider} from '@rmwc/theme';
+import {Grid, GridCell} from '@rmwc/grid';
+import {LinearProgress} from '@rmwc/linear-progress';
 import eyeson from 'eyeson';
 import Toolbar from './Toolbar';
 import Video from './Video';
@@ -79,7 +79,6 @@ class App extends Component {
             {!this.state.stream && (
               <Fragment>
                 <TextField
-                  outlined
                   label="Meeting Access Key"
                   onChange={this.start}
                   disabled={this.state.connecting}
