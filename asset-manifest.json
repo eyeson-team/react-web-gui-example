@@ -1,6 +1,15 @@
 {
-  "main.css": "static/css/main.eccbf3e9.css",
-  "main.css.map": "static/css/main.eccbf3e9.css.map",
-  "main.js": "static/js/main.2b7e16f9.js",
-  "main.js.map": "static/js/main.2b7e16f9.js.map"
+  "files": {
+    "main.css": "/react-web-gui-example/static/css/main.313090af.chunk.css",
+    "main.js": "/react-web-gui-example/static/js/main.0f1431a2.chunk.js",
+    "main.js.map": "/react-web-gui-example/static/js/main.0f1431a2.chunk.js.map",
+    "runtime~main.js": "/react-web-gui-example/static/js/runtime~main.6bd568aa.js",
+    "runtime~main.js.map": "/react-web-gui-example/static/js/runtime~main.6bd568aa.js.map",
+    "static/js/2.7b756611.chunk.js": "/react-web-gui-example/static/js/2.7b756611.chunk.js",
+    "static/js/2.7b756611.chunk.js.map": "/react-web-gui-example/static/js/2.7b756611.chunk.js.map",
+    "index.html": "/react-web-gui-example/index.html",
+    "precache-manifest.03d1548d7a5c8d1c5e3326a78b1f7c0c.js": "/react-web-gui-example/precache-manifest.03d1548d7a5c8d1c5e3326a78b1f7c0c.js",
+    "service-worker.js": "/react-web-gui-example/service-worker.js",
+    "static/css/main.313090af.chunk.css.map": "/react-web-gui-example/static/css/main.313090af.chunk.css.map"
+  }
 }
