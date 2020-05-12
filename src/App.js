@@ -12,7 +12,7 @@ import './App.css';
 const ACCESS_KEY_LENGTH = 24;
 
 class App extends Component {
-  state = {stream: null, connecting: false, audio: true, video: true};
+  state = {stream: null, connecting: false, audio: true, video: true, screen: false};
 
   constructor(props) {
     super(props);
@@ -20,6 +20,7 @@ class App extends Component {
     this.handleEvent = this.handleEvent.bind(this);
     this.toggleAudio = this.toggleAudio.bind(this);
     this.toggleVideo = this.toggleVideo.bind(this);
+    this.toggleScreen = this.toggleScreen.bind(this);
   }
 
   componentDidMount() {
@@ -27,6 +28,12 @@ class App extends Component {
   }
 
   handleEvent(event) {
+    if (event.type === 'presentation_ended') {
+      eyeson.send({ type: 'start_stream', audio: this.state.audio,
+                    video: this.state.video });
+      this.setState({screen: false});
+      return;
+    }
     if (event.type !== 'accept') {
       console.debug('[App]', 'Ignore received event:', event.type);
       return;
@@ -56,6 +63,16 @@ class App extends Component {
       audio: this.state.audio,
     });
     this.setState({video: !this.state.video});
+  }
+
+  toggleScreen() {
+    if (!this.state.screen) {
+      eyeson.send({ type: 'start_screen_capture', audio: this.state.audio,
+                    screenStream: null, screen: true });
+      this.setState({screen: true});
+    } else {
+      eyeson.send({ type: 'stop_presenting' });
+    }
   }
 
   start(event) {
@@ -105,6 +122,12 @@ class App extends Component {
                   onClick={this.toggleVideo}
                   label="Toggle video"
                   icon={this.state.video ? 'videocam' : 'videocam_off'}
+                />
+                <IconButton
+                  checked={this.state.screen}
+                  onClick={this.toggleScreen}
+                  label="Share screen"
+                  icon={this.state.video ? 'screen_share' : 'stop_screen_share'}
                 />
               </Fragment>
             )}
