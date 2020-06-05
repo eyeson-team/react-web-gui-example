@@ -4,7 +4,7 @@ import {IconButton} from '@rmwc/icon-button';
 import {ThemeProvider} from '@rmwc/theme';
 import {Grid, GridCell} from '@rmwc/grid';
 import {LinearProgress} from '@rmwc/linear-progress';
-import eyeson from 'eyeson';
+import eyeson, { StreamHelpers } from 'eyeson';
 import Toolbar from './Toolbar';
 import Video from './Video';
 import './App.css';
@@ -12,7 +12,7 @@ import './App.css';
 const ACCESS_KEY_LENGTH = 24;
 
 class App extends Component {
-  state = {stream: null, connecting: false, audio: true, video: true, screen: false};
+  state = {local: null, stream: null, connecting: false, audio: true, video: true, screen: false};
 
   constructor(props) {
     super(props);
@@ -46,19 +46,19 @@ class App extends Component {
   }
 
   toggleAudio() {
-    eyeson.send({
-      type: 'change_stream',
-      stream: this.state.localStream,
-      video: this.state.video,
-      audio: !this.state.audio,
-    });
-    this.setState({audio: !this.state.audio});
+    const audioEnabled = !this.state.audio;
+    if (audioEnabled) {
+      StreamHelpers.enableAudio(this.state.local);
+    } else {
+      StreamHelpers.disableAudio(this.state.local);
+    }
+    this.setState({audio: audioEnabled});
   }
 
   toggleVideo() {
     eyeson.send({
       type: 'change_stream',
-      stream: this.state.localStream,
+      stream: this.state.local,
       video: !this.state.video,
       audio: this.state.audio,
     });
