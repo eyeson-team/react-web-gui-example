@@ -4,12 +4,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "eyeson": "^1.5.0",
+    "eyeson": "^1.5.1",
     "gh-pages": "^2.0.1",
     "lodash": "4.17.19",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^3.4.1",
     "rmwc": "^5.5.2"
   },
   "scripts": {
