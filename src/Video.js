@@ -12,7 +12,7 @@ class Video extends Component {
   }
 
   render() {
-    return <video className="Video" ref={ref => (this.video = ref)} />;
+    return <video className="Video" ref={ref => (this.video = ref)} playsInline />;
   }
 }
 
