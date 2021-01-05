@@ -90,7 +90,7 @@ class App extends Component {
         <Toolbar title="Web GUI React App" />
         <Grid className="App">
           <GridCell span="12">
-            {this.state.connecting && <LinearProgress determinate={false} />}
+            {this.state.connecting && <LinearProgress />}
           </GridCell>
           <GridCell span="11">
             {!this.state.stream && (
