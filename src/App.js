@@ -28,6 +28,7 @@ class App extends Component {
   }
 
   handleEvent(event) {
+    console.debug(event.type, event);
     if (event.type === 'presentation_ended') {
       eyeson.send({ type: 'start_stream', audio: this.state.audio,
                     video: this.state.video });
