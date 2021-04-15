@@ -57,12 +57,12 @@ class App extends Component {
   }
 
   toggleVideo() {
-    eyeson.send({
-      type: 'change_stream',
-      stream: this.state.local,
-      video: !this.state.video,
-      audio: this.state.audio,
-    });
+    if (this.state.video) {
+      StreamHelpers.disableCamera(this.state.local);
+    } else {
+      StreamHelpers.enableCamera(this.state.local);
+    }
+    
     this.setState({video: !this.state.video});
   }
 
