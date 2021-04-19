@@ -128,7 +128,7 @@ class App extends Component {
                   checked={this.state.screen}
                   onClick={this.toggleScreen}
                   label="Share screen"
-                  icon={this.state.video ? 'screen_share' : 'stop_screen_share'}
+                  icon={this.state.screen ? 'stop_screen_share' : 'screen_share'}
                 />
               </Fragment>
             )}
