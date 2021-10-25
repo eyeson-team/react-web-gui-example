@@ -1,18 +1,22 @@
-import React, {Component} from 'react';
+import { Component } from 'react';
 import './Video.css';
 
 class Video extends Component {
+  
   shouldComponentUpdate() {
     return false; // disable updates
   }
 
-  set video(ref) {
-    ref.srcObject = this.props.src;
-    ref.play();
-  }
+  initVideo = video => {
+    if (video) {
+      video.srcObject = this.props.stream;
+    }
+  };
 
   render() {
-    return <video className="Video" ref={ref => (this.video = ref)} playsInline />;
+    return (
+      <video className="Video" ref={this.initVideo} playsInline autoPlay />
+    );
   }
 }
 
