@@ -1,139 +1,216 @@
-import React, {Component, Fragment} from 'react';
-import {TextField, TextFieldHelperText} from '@rmwc/textfield';
-import {IconButton} from '@rmwc/icon-button';
-import {ThemeProvider} from '@rmwc/theme';
-import {Grid, GridCell} from '@rmwc/grid';
-import {LinearProgress} from '@rmwc/linear-progress';
+import { Component, Fragment } from 'react';
+import { TextField } from '@rmwc/textfield';
+import { IconButton } from '@rmwc/icon-button';
+import { ThemeProvider } from '@rmwc/theme';
+import { Grid, GridCell } from '@rmwc/grid';
+import { LinearProgress } from '@rmwc/linear-progress';
+import { Snackbar } from '@rmwc/snackbar';
 import eyeson, { StreamHelpers } from 'eyeson';
 import Toolbar from './Toolbar';
 import Video from './Video';
+import SettingsDialog from './SettingsDialog';
 import './App.css';
 
 const ACCESS_KEY_LENGTH = 24;
 
 class App extends Component {
-  state = {local: null, stream: null, connecting: false, audio: true, video: true, screen: false};
-
-  constructor(props) {
-    super(props);
-    this.start = this.start.bind(this);
-    this.handleEvent = this.handleEvent.bind(this);
-    this.toggleAudio = this.toggleAudio.bind(this);
-    this.toggleVideo = this.toggleVideo.bind(this);
-    this.toggleScreen = this.toggleScreen.bind(this);
-  }
+  
+  state = {
+    localStream: null,
+    remoteStream: null,
+    connecting: false,
+    audio: true,
+    video: true,
+    screen: false,
+    settingsDialog: false,
+    toastMessage: ''
+  };
 
   componentDidMount() {
     eyeson.onEvent(this.handleEvent);
   }
 
-  handleEvent(event) {
-    console.debug(event.type, event);
-    if (event.type === 'presentation_ended') {
-      eyeson.send({ type: 'start_stream', audio: this.state.audio,
-                    video: this.state.video });
-      this.setState({screen: false});
+  handleEvent = event => {
+    const { type } = event;
+    console.debug(type, event);
+    if (type === 'presentation_ended') {
+      eyeson.send({
+        type: 'start_stream',
+        audio: this.state.audio,
+        video: this.state.video
+      });
+      this.setState({ screen: false });
       return;
     }
-    if (event.type !== 'accept') {
-      console.debug('[App]', 'Ignore received event:', event.type);
+    if (type === 'accept') {
+      this.setState({
+        localStream: event.localStream,
+        remoteStream: event.remoteStream,
+        connecting: false
+      });
       return;
     }
-    this.setState({
-      local: event.localStream,
-      stream: event.remoteStream,
-      connecting: false,
-    });
-  }
-
-  toggleAudio() {
-    const audioEnabled = !this.state.audio;
-    if (audioEnabled) {
-      StreamHelpers.enableAudio(this.state.local);
-    } else {
-      StreamHelpers.disableAudio(this.state.local);
+    if (type === 'warning') {
+      this.setState({ toastMessage: 'Warning: ' + event.name });
+      return;
     }
-    this.setState({audio: audioEnabled});
-  }
+    if (type === 'error') {
+      this.setState({ toastMessage: 'Error: ' + event.name });
+      this.endSession();
+      return;
+    }
+    if (type === 'exit') {
+      this.setState({ toastMessage: 'Meeting has ended' });
+      this.endSession();
+      return;
+    }
+    console.debug('[App]', 'Ignore received event:', event.type);
+  };
 
-  toggleVideo() {
+  toggleAudio = () => {
+    const { audio, localStream } = this.state;
+    const audioEnabled = !audio;
+    StreamHelpers.toggleAudio(localStream, audioEnabled);
+    this.setState({ audio: audioEnabled });
+  };
+
+  toggleVideo = () => {
+    const { audio, video, localStream } = this.state;
+    const videoEnabled = !video;
     eyeson.send({
       type: 'change_stream',
-      stream: this.state.local,
-      video: !this.state.video,
-      audio: this.state.audio,
+      stream: localStream,
+      video: videoEnabled,
+      audio: audio
     });
-    this.setState({video: !this.state.video});
-  }
+    this.setState({ video: videoEnabled });
+  };
 
-  toggleScreen() {
+  toggleScreen = () => {
     if (!this.state.screen) {
-      eyeson.send({ type: 'start_screen_capture', audio: this.state.audio,
-                    screenStream: null, screen: true });
-      this.setState({screen: true});
+      eyeson.send({
+        type: 'start_screen_capture',
+        audio: this.state.audio,
+        screenStream: null,
+        screen: true
+      });
+      this.setState({ screen: true });
     } else {
       eyeson.send({ type: 'stop_presenting' });
     }
-  }
+  };
 
-  start(event) {
+  showSettings = () => {
+    this.setState({ settingsDialog: true });
+  };
+
+  closeSettings = (updateStream = false) => {
+    this.setState({ settingsDialog: false });
+    if (updateStream && !this.state.screen) {
+      eyeson.send({
+        type: 'start_stream',
+        audio: this.state.audio,
+        video: this.state.video
+      });
+    }
+  };
+
+  handleToastClose = () => {
+    this.setState({ toastMessage: '' });
+  };
+
+  start = event => {
     const key = event.target.value.trim();
     if (key.length !== ACCESS_KEY_LENGTH) {
       return;
     }
-    this.setState({connecting: true});
+    this.setState({ connecting: true });
     eyeson.start(key);
-  }
+  };
+
+  endSession = () => {
+    eyeson.offEvent(this.handleEvent);
+    eyeson.destroy();
+    this.setState({
+      localStream: null,
+      remoteStream: null,
+      connecting: false
+    });
+    eyeson.onEvent(this.handleEvent);
+  };
 
   render() {
+    const { connecting, remoteStream, audio, video, screen, toastMessage } = this.state;
     return (
       <ThemeProvider options={{primary: '#9e206c', secondary: '#6d6d6d'}}>
         <Toolbar title="Web GUI React App" />
         <Grid className="App">
           <GridCell span="12">
-            {this.state.connecting && <LinearProgress />}
+            {connecting && <LinearProgress />}
           </GridCell>
           <GridCell span="11">
-            {!this.state.stream && (
+            {!remoteStream && (
               <Fragment>
                 <TextField
                   label="Meeting Access Key"
+                  disabled={connecting}
+                  style={{width: '20rem'}}
                   onChange={this.start}
-                  disabled={this.state.connecting}
+                  helpText={{
+                    persistent: true,
+                    children: "Get an user access key from starting a meeting via the API or use one from an active meeting."
+                  }}
                 />
-                <TextFieldHelperText>
-                  Get an user access key from starting a meeting via the API or
-                  use one from an active meeting.
-                </TextFieldHelperText>
               </Fragment>
             )}
-            {this.state.stream && <Video src={this.state.stream} />}
+            {remoteStream && <Video stream={remoteStream} />}
           </GridCell>
           <GridCell span="1" className="App-sidebar">
-            {this.state.stream && (
+            {remoteStream && (
               <Fragment>
                 <IconButton
-                  checked={this.state.audio}
+                  checked={audio}
                   onClick={this.toggleAudio}
                   label="Toggle audio"
-                  icon={this.state.audio ? 'mic' : 'mic_off'}
+                  icon={audio ? 'mic' : 'mic_off'}
                 />
                 <IconButton
-                  checked={this.state.video}
+                  checked={video}
+                  disabled={screen}
                   onClick={this.toggleVideo}
                   label="Toggle video"
-                  icon={this.state.video ? 'videocam' : 'videocam_off'}
+                  icon={video ? 'videocam' : 'videocam_off'}
                 />
                 <IconButton
-                  checked={this.state.screen}
+                  checked={screen}
                   onClick={this.toggleScreen}
                   label="Share screen"
-                  icon={this.state.screen ? 'stop_screen_share' : 'screen_share'}
+                  icon={screen ? 'stop_screen_share' : 'screen_share'}
+                />
+                <IconButton
+                  disabled={screen}
+                  onClick={this.showSettings}
+                  label="Settings"
+                  icon="settings"
+                />
+                <IconButton
+                  onClick={this.endSession}
+                  label="Leave Meeting"
+                  icon="logout"
                 />
               </Fragment>
             )}
           </GridCell>
         </Grid>
+        <SettingsDialog
+          open={this.state.settingsDialog}
+          onClose={this.closeSettings}
+        />
+        <Snackbar
+          open={toastMessage !== ''}
+          message={toastMessage}
+          onClose={this.handleToastClose}
+        />
       </ThemeProvider>
     );
   }
