@@ -50,6 +50,14 @@ class App extends Component {
       });
       return;
     }
+    if (type === 'stream_update') {
+      if (event.localStream) {
+        this.setState({ localStream: event.localStream });
+      }
+      if (event.stream) {
+        this.setState({ remoteStream: event.stream });
+      }
+    }
     if (type === 'warning') {
       this.setState({ toastMessage: 'Warning: ' + event.name });
       return;
