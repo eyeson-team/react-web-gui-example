@@ -57,6 +57,7 @@ class App extends Component {
       if (event.stream) {
         this.setState({ remoteStream: event.stream });
       }
+      return;
     }
     if (type === 'warning') {
       this.setState({ toastMessage: 'Warning: ' + event.name });
