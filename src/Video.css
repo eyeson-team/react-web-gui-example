@@ -1,8 +1,0 @@
-.Video {
-  width: 100%;
-  height: 100%;
-  max-height: calc(100vh - 10rem);
-  display: block;
-  overflow: visible;
-  object-fit: contain;
-}

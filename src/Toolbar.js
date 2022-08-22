@@ -1,14 +1,13 @@
-import logo from './logo.png';
+import logo from './eyeson-logo.svg';
 import { TopAppBar, TopAppBarRow, TopAppBarSection, TopAppBarTitle, TopAppBarFixedAdjust } from '@rmwc/top-app-bar';
 import { Button } from '@rmwc/button';
-import './Toolbar.css';
 
 const Toolbar = ({ title }) => (
   <>
     <TopAppBar fixed>
       <TopAppBarRow>
         <TopAppBarSection alignStart>
-          <img src={logo} alt="eyeson Logo" className="Toolbar-logo" />
+          <img src={logo} height="32" alt="eyeson Logo" className="toolbar-logo" />
           <TopAppBarTitle>{title}</TopAppBarTitle>
         </TopAppBarSection>
         <TopAppBarSection alignEnd>

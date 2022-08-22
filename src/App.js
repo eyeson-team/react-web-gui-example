@@ -1,228 +1,109 @@
-import { Component, Fragment } from 'react';
-import { TextField } from '@rmwc/textfield';
-import { IconButton } from '@rmwc/icon-button';
+import eyeson from 'eyeson';
+import { Component } from 'react';
 import { ThemeProvider } from '@rmwc/theme';
-import { Grid, GridCell } from '@rmwc/grid';
 import { LinearProgress } from '@rmwc/linear-progress';
-import { Snackbar } from '@rmwc/snackbar';
-import eyeson, { StreamHelpers } from 'eyeson';
-import Toolbar from './Toolbar';
-import Video from './Video';
-import SettingsDialog from './SettingsDialog';
-import './App.css';
-
-const ACCESS_KEY_LENGTH = 24;
+import { SnackbarQueue } from '@rmwc/snackbar';
+import { queue } from './Notify.js';
+import Toolbar from './Toolbar.js';
+import StartForm from './StartForm.js';
+import Preview from './Preview.js';
+import Meeting from './Meeting.js';
 
 class App extends Component {
-  
-  state = {
-    localStream: null,
-    remoteStream: null,
-    connecting: false,
-    audio: true,
-    video: true,
-    screen: false,
-    settingsDialog: false,
-    toastMessage: ''
-  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: false,
+      connected: false,
+      inPreview: true,
+      mediaOptions: { audio: true, video: true }
+    };
+  }
 
   componentDidMount() {
     eyeson.onEvent(this.handleEvent);
   }
 
   handleEvent = event => {
-    const { type } = event;
-    console.debug(type, event);
-    if (type === 'presentation_ended') {
-      eyeson.send({
-        type: 'start_stream',
-        audio: this.state.audio,
-        video: this.state.video
-      });
-      this.setState({ screen: false });
+    const { type, connectionStatus } = event;
+
+    if (type !== 'connection') {
       return;
     }
-    if (type === 'accept') {
+
+    if (!['initialize', 'fetch_room', 'received_room', 'ready'].includes(connectionStatus)) {
+      this.setState({ loading: false }, () => {
+        queue.notify({ title: connectionStatus, icon: 'error' });
+      });
+      return;
+    }
+
+    if (connectionStatus === 'ready') {
       this.setState({
-        localStream: event.localStream,
-        remoteStream: event.remoteStream,
-        connecting: false
-      });
-      return;
-    }
-    if (type === 'stream_update') {
-      if (event.localStream) {
-        this.setState({ localStream: event.localStream });
-      }
-      if (event.stream) {
-        this.setState({ remoteStream: event.stream });
-      }
-      return;
-    }
-    if (type === 'warning') {
-      this.setState({ toastMessage: 'Warning: ' + event.name });
-      return;
-    }
-    if (type === 'error') {
-      this.setState({ toastMessage: 'Error: ' + event.name });
-      this.endSession();
-      return;
-    }
-    if (type === 'exit') {
-      this.setState({ toastMessage: 'Meeting has ended' });
-      this.endSession();
-      return;
-    }
-    console.debug('[App]', 'Ignore received event:', event.type);
-  };
-
-  toggleAudio = () => {
-    const { audio, localStream } = this.state;
-    const audioEnabled = !audio;
-    StreamHelpers.toggleAudio(localStream, audioEnabled);
-    this.setState({ audio: audioEnabled });
-  };
-
-  toggleVideo = () => {
-    const { audio, video, localStream } = this.state;
-    const videoEnabled = !video;
-    eyeson.send({
-      type: 'change_stream',
-      stream: localStream,
-      video: videoEnabled,
-      audio: audio
-    });
-    this.setState({ video: videoEnabled });
-  };
-
-  toggleScreen = () => {
-    if (!this.state.screen) {
-      eyeson.send({
-        type: 'start_screen_capture',
-        audio: this.state.audio,
-        screenStream: null,
-        screen: true
-      });
-      this.setState({ screen: true });
-    } else {
-      eyeson.send({ type: 'stop_presenting' });
-    }
-  };
-
-  showSettings = () => {
-    this.setState({ settingsDialog: true });
-  };
-
-  closeSettings = (updateStream = false) => {
-    this.setState({ settingsDialog: false });
-    if (updateStream && !this.state.screen) {
-      eyeson.send({
-        type: 'start_stream',
-        audio: this.state.audio,
-        video: this.state.video
+        loading: false,
+        connected: true
       });
     }
   };
 
-  handleToastClose = () => {
-    this.setState({ toastMessage: '' });
+  onStart = token => {
+    this.setState({ loading: true });
+    eyeson.connect(token);
   };
 
-  start = event => {
-    const key = event.target.value.trim();
-    if (key.length !== ACCESS_KEY_LENGTH) {
-      return;
-    }
-    this.setState({ connecting: true });
-    eyeson.start(key);
+  onJoin = mediaOptions => {
+    this.setState({ mediaOptions, inPreview: false });
   };
 
-  endSession = () => {
-    eyeson.offEvent(this.handleEvent);
+  exitMeeting = () => {
     eyeson.destroy();
-    this.setState({
-      localStream: null,
-      remoteStream: null,
-      connecting: false
-    });
     eyeson.onEvent(this.handleEvent);
+    this.setState({ loading: false, connected: false, inPreview: true });
   };
+
+  setLoading = loading => {
+    this.setState({ loading });
+  };
+
+  renderContent() {
+    return [{
+      condition: () => this.state.inPreview && !this.state.connected,
+      component: () => (
+        <StartForm onStart={this.onStart} loading={this.state.loading} />
+      )
+    }, {
+      condition: () => this.state.inPreview,
+      component: () => (
+        <Preview onJoin={this.onJoin} exitMeeting={this.exitMeeting} />
+      )
+    }, {
+      condition: () => true,
+      component: () => {
+        eyeson.offEvent(this.handleEvent);
+        return (
+          <Meeting exitMeeting={this.exitMeeting} setLoading={this.setLoading} mediaOptions={this.state.mediaOptions} />
+        );
+      }
+    }]
+      .find(component => component.condition())
+      .component();
+  }
 
   render() {
-    const { connecting, remoteStream, audio, video, screen, toastMessage } = this.state;
     return (
-      <ThemeProvider options={{primary: '#9e206c', secondary: '#6d6d6d'}}>
+      <ThemeProvider options={{ primary: '#9e206c', secondary: '#6d6d6d' }}>
         <Toolbar title="Web GUI React App" />
-        <Grid className="App">
-          <GridCell span="12">
-            {connecting && <LinearProgress />}
-          </GridCell>
-          <GridCell span="11">
-            {!remoteStream && (
-              <Fragment>
-                <TextField
-                  label="Meeting Access Key"
-                  disabled={connecting}
-                  style={{width: '20rem'}}
-                  onChange={this.start}
-                  helpText={{
-                    persistent: true,
-                    children: "Get an user access key from starting a meeting via the API or use one from an active meeting."
-                  }}
-                />
-              </Fragment>
-            )}
-            {remoteStream && <Video stream={remoteStream} />}
-          </GridCell>
-          <GridCell span="1" className="App-sidebar">
-            {remoteStream && (
-              <Fragment>
-                <IconButton
-                  checked={audio}
-                  onClick={this.toggleAudio}
-                  label="Toggle audio"
-                  icon={audio ? 'mic' : 'mic_off'}
-                />
-                <IconButton
-                  checked={video}
-                  disabled={screen}
-                  onClick={this.toggleVideo}
-                  label="Toggle video"
-                  icon={video ? 'videocam' : 'videocam_off'}
-                />
-                <IconButton
-                  checked={screen}
-                  onClick={this.toggleScreen}
-                  label="Share screen"
-                  icon={screen ? 'stop_screen_share' : 'screen_share'}
-                />
-                <IconButton
-                  disabled={screen}
-                  onClick={this.showSettings}
-                  label="Settings"
-                  icon="settings"
-                />
-                <IconButton
-                  onClick={this.endSession}
-                  label="Leave Meeting"
-                  icon="logout"
-                />
-              </Fragment>
-            )}
-          </GridCell>
-        </Grid>
-        <SettingsDialog
-          open={this.state.settingsDialog}
-          onClose={this.closeSettings}
-        />
-        <Snackbar
-          open={toastMessage !== ''}
-          message={toastMessage}
-          onClose={this.handleToastClose}
-        />
+        <LinearProgress closed={!this.state.loading} />
+        <main id="app">
+          {this.renderContent()}
+        </main>
+        <SnackbarQueue messages={queue.messages} />
       </ThemeProvider>
+
     );
   }
-}
+} 
 
 export default App;
