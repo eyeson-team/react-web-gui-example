@@ -4,7 +4,7 @@
   "version": "0.2.0",
   "private": true,
   "dependencies": {
-    "eyeson": "^1.8.0",
+    "eyeson": "^1.8.2",
     "gh-pages": "^3.2.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

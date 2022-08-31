@@ -5766,10 +5766,10 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-eyeson@^1.8.0:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/eyeson/-/eyeson-1.8.1.tgz#682a0539206556699b1e1f3c74908aefda0d9320"
-  integrity sha512-GZSgxILYNLapVLdMQj9e3/BGapSrVORPHxSl88gmVQS8aFy1VjdqomfXNB/vB1RN0mssECKy1Kxq4Pnwc+9F4Q==
+eyeson@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/eyeson/-/eyeson-1.8.2.tgz#9a1bb42ad8b4b763d5f9b5d0c4eb92e587085b99"
+  integrity sha512-TCKv3RdNdjGTgOAFSdUSBZYdP1uVvfWnlMTe/JgEp4aTnTvVzeEB4C/uFb0siOCw8dem2z0LaS1K6/+vrcRiPQ==
   dependencies:
     "@rails/actioncable" "*"
     platform "^1.3.6"
