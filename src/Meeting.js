@@ -5,6 +5,7 @@ import { Tooltip } from '@rmwc/tooltip';
 import { IconButton } from '@rmwc/icon-button';
 import { queue } from './Notify.js';
 import Video from './Video.js';
+import Audio from './Audio.js';
 import SettingsDialog from './SettingsDialog.js';
 
 class Meeting extends Component {
@@ -23,7 +24,8 @@ class Meeting extends Component {
       settingsDialog: false,
       sfuMode: false,
       solo: true,
-      hasPresenter: false
+      hasPresenter: false,
+      hasMutedVideoPeers: false,
     };
   }
 
@@ -71,7 +73,8 @@ class Meeting extends Component {
     else if (type === 'podium') {
       this.setState({
         solo: event.solo,
-        hasPresenter: event.hasPresenter
+        hasPresenter: event.hasPresenter,
+        hasMutedVideoPeers: event.hasMutedVideoPeers,
       });
     }
     else if (type === 'remote_description_update') {
@@ -145,18 +148,40 @@ class Meeting extends Component {
     this.props.exitMeeting();
   };
 
+  renderMainView() {
+    const { remoteStream, localStream, video, sfuMode, solo, hasMutedVideoPeers } = this.state;
+    return [{
+      condition: () => solo && video,
+      component: () => (
+        <Video stream={localStream} muted />
+      )
+    }, {
+      condition: () => sfuMode && hasMutedVideoPeers,
+      component: () => (
+        <div className="empty-video-container">
+          <div className="video empty">
+            <Audio stream={remoteStream} />
+          </div>
+        </div>
+      )
+    }, {
+      condition: () => true,
+      component: () => (
+        <Video stream={remoteStream} />
+      )
+    }]
+    .find(component => component.condition())
+    .component();
+  };
+
   render() {
-    const { remoteStream, localStream, audio, video, screen, sfuMode, solo, hasPresenter, settingsDialog } = this.state;
+    const { localStream, audio, video, screen, sfuMode, solo, hasPresenter, settingsDialog } = this.state;
     const showSelfView = video && sfuMode && !solo && !hasPresenter;
     return (
       <>
         <Grid>
           <GridCell span="11">
-            {solo && video ? (
-              <Video stream={localStream} muted />
-            ) : (
-              <Video stream={remoteStream} />
-            )}
+            {this.renderMainView()}
             {showSelfView && (
               <div id="self-view">
                 <Video stream={localStream} muted />

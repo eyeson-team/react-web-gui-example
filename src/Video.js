@@ -1,8 +1,7 @@
 import { Component } from 'react';
 
-const tryPlay = player => {
-  return player.play().catch(() => console.log('unable to play video'));
-};
+const noop = () => console.log('unable to play video');
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 class Video extends Component {
   
@@ -15,8 +14,10 @@ class Video extends Component {
     const { video } = this;
     const { stream } = this.props;
     if (stream && video && !video.srcObject) {
-      video.srcObject = stream;
-      this.playPromise = this.playPromise.then(tryPlay(video));
+      this.playPromise = this.playPromise.then(() => {
+        video.srcObject = stream;
+        return Promise.race([video.play().catch(noop), sleep(150)]);
+      });
     }
   }
 
@@ -24,8 +25,10 @@ class Video extends Component {
     const { video } = this;
     const { stream } = this.props;
     if (stream && video && (!video.srcObject || prevProps.stream !== stream)) {
-      video.srcObject = stream;
-      this.playPromise = this.playPromise.then(tryPlay(video));
+      this.playPromise = this.playPromise.then(() => {
+        video.srcObject = stream;
+        return Promise.race([video.play().catch(noop), sleep(150)]);
+      });
     }
   }
 
@@ -38,7 +41,7 @@ class Video extends Component {
   }
   
   initVideo = video => {
-    if (video) {
+    if (video && video !== this.video) {
       this.video = video;
     }
   };

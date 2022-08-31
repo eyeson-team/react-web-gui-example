@@ -54,6 +54,14 @@ body {
   overflow: visible;
   object-fit: contain;
 }
+.empty-video-container {
+  height: calc(100vh - 10rem);
+  aspect-ratio: 4 / 3;
+  margin-inline: auto;
+}
+.video.empty {
+  background: #404040;
+}
 #start .mdc-form-field {
   width: 100%;
 }
