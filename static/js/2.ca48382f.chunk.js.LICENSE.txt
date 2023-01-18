@@ -5,23 +5,23 @@ object-assign
 */
 
 /*!
-         * Platform.js v1.3.6
-         * Copyright 2014-2020 Benjamin Tan
-         * Copyright 2011-2013 John-David Dalton
-         * Available under MIT license
-         */
-
-/*!
-        * screenfull
-        * v5.2.0 - 2021-11-03
-        * (c) Sindre Sorhus; MIT License
-        */
-
-/*!
-  Copyright (c) 2018 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
+	Copyright (c) 2018 Jed Watson.
+	Licensed under the MIT License (MIT), see
+	http://jedwatson.github.io/classnames
 */
+
+/*!
+           * Platform.js v1.3.6
+           * Copyright 2014-2020 Benjamin Tan
+           * Copyright 2011-2013 John-David Dalton
+           * Available under MIT license
+           */
+
+/*!
+          * screenfull
+          * v5.2.0 - 2021-11-03
+          * (c) Sindre Sorhus; MIT License
+          */
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
