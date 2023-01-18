@@ -1,4 +1,4 @@
-import eyeson, { StreamHelpers } from 'eyeson';
+import eyeson, { StreamHelpers, FeatureDetector } from 'eyeson';
 import { Component } from 'react';
 import { Grid, GridCell } from '@rmwc/grid';
 import { Tooltip } from '@rmwc/tooltip';
@@ -27,6 +27,8 @@ class Meeting extends Component {
       hasPresenter: false,
       hasMutedVideoPeers: false,
     };
+
+    this.canScreenCapture = FeatureDetector.canScreenCapture();
   }
 
   componentDidMount() {
@@ -208,6 +210,7 @@ class Meeting extends Component {
             </Tooltip>
             <Tooltip content={screen ? 'Stop screenshare' : 'Start screenshare'} align="left">
               <IconButton
+                disabled={this.canScreenCapture === false}
                 checked={screen}
                 onClick={this.toggleScreen}
                 label="Share screen"
