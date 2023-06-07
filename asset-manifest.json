@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/react-web-gui-example/static/css/main.5284f7c9.css",
-    "main.js": "/react-web-gui-example/static/js/main.f7c17040.js",
+    "main.js": "/react-web-gui-example/static/js/main.59c8e99c.js",
     "static/media/Hubot-Sans.woff": "/react-web-gui-example/static/media/Hubot-Sans.dc5cd87eae988c550071.woff",
     "static/media/Hubot-Sans.woff2": "/react-web-gui-example/static/media/Hubot-Sans.ae83e65a651ef30d12d2.woff2",
     "static/media/eyeson-logo.svg": "/react-web-gui-example/static/media/eyeson-logo.69939d23f98d72146347312a3a0172d2.svg",
     "index.html": "/react-web-gui-example/index.html",
     "main.5284f7c9.css.map": "/react-web-gui-example/static/css/main.5284f7c9.css.map",
-    "main.f7c17040.js.map": "/react-web-gui-example/static/js/main.f7c17040.js.map"
+    "main.59c8e99c.js.map": "/react-web-gui-example/static/js/main.59c8e99c.js.map"
   },
   "entrypoints": [
     "static/css/main.5284f7c9.css",
-    "static/js/main.f7c17040.js"
+    "static/js/main.59c8e99c.js"
   ]
 }
