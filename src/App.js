@@ -93,7 +93,7 @@ class App extends Component {
 
   render() {
     return (
-      <ThemeProvider options={{ primary: '#9e206c', secondary: '#6d6d6d' }}>
+      <ThemeProvider options={{ primary: '#121212', secondary: '#6d6d6d' }}>
         <Toolbar title="Web GUI React App" />
         <LinearProgress closed={!this.state.loading} />
         <main id="app">

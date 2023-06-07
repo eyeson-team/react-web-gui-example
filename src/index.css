@@ -1,8 +1,22 @@
+@font-face {
+  font-family: 'Hubot Sans';
+  src: 
+    url('../public/fonts/hubot/Hubot-Sans.woff2') format('woff2 supports variations'),
+    url('../public/fonts/hubot/Hubot-Sans.woff2') format('woff2-variations'),
+    url('../public/fonts/hubot/Hubot-Sans.woff') format('woff');
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+  font-display: swap;
+}
+html {   
+  --mdc-typography-font-family: "Hubot Sans", Helvetica, sans-serif;
+  --mdc-typography-button-font-weight: 700;
+  --mdc-typography-button-letter-spacing: 1px;
+}
 body {
   min-width: 600px;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
   background: #f0f0f0;
 }
 #app {
@@ -30,6 +44,7 @@ body {
 .device {
   margin-block: 8px;
 }
+.mdc-form-field--align-end > label {font-weight: 700;}
 .field {
   display: flex;
   height: 48px;
@@ -60,7 +75,7 @@ body {
   margin-inline: auto;
 }
 .video.empty {
-  background: #404040;
+  background: #121212;
 }
 #start .mdc-form-field {
   width: 100%;
