@@ -1,8 +1,8 @@
 
-# eyeson Web GUI build with React
+# Eyeson Web GUI build with React
 
-A minimal web gui for video meetings using [eyeson]. The application
-demonstrates a very simple interface for [eyeson] video meetings and can
+A minimal web gui for video meetings using [Eyeson]. The application
+demonstrates a very simple interface for [Eyeson] video meetings and can
 be used to host or integrate videos in any software. Create your own [api key]
 and enhance your products with powerful video meetings.
 
@@ -16,11 +16,10 @@ $ yarn deploy # deploy to github pages (adapt homepage of package.json)
 ```
 
 ![Screenshot Desktop](screenshot_desktop.png)
-![Screenshot Mobile](screenshot_mobile.png)
 
 This project was bootstrapped with [Create React App].
 
-[eyeson]: https://eyeson.team/ "eyeson Video Meetings"
-[api key]: https://developers.eyeson.team/projects "eyeson API Key"
+[Eyeson]: https://eyeson.team/ "Eyeson Video Meetings"
+[api key]: https://developers.eyeson.team/projects "Eyeson API Key"
 [eyeson-team.github.io/react-web-gui-example]: https://eyeson-team.github.io/react-web-gui-example/
 [Create React App]: https://github.com/facebookincubator/create-react-app

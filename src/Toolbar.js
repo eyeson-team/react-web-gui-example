@@ -7,7 +7,7 @@ const Toolbar = ({ title }) => (
     <TopAppBar fixed>
       <TopAppBarRow>
         <TopAppBarSection alignStart>
-          <img src={logo} height="32" alt="eyeson Logo" className="toolbar-logo" />
+          <img src={logo} height="32" alt="Eyeson Logo" className="toolbar-logo" />
           <TopAppBarTitle>{title}</TopAppBarTitle>
         </TopAppBarSection>
         <TopAppBarSection alignEnd>
