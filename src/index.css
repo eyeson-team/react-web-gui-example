@@ -97,3 +97,6 @@ body {
     flex-flow: row nowrap;
   }
 }
+.rmwc-tooltip {
+  font-family: var(--mdc-typography-font-family);
+}
