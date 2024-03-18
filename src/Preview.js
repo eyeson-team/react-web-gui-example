@@ -1,4 +1,4 @@
-import { DeviceManager } from 'eyeson';
+import { DeviceManager, FeatureDetector } from 'eyeson';
 import { Component } from 'react';
 import { Typography } from '@rmwc/typography';
 import { Select } from '@rmwc/select';
@@ -8,11 +8,15 @@ import { Card } from '@rmwc/card';
 import { queue } from './Notify.js';
 import Video from './Video.js';
 import { getSelectedDeviceId, mapDeviceList } from './utils.js';
+import virtualBackgroundOptions from './virtualBackgroundOptions.js';
 
 class Preview extends Component {
 
   constructor(props) {
     super(props);
+    
+    this.supportsVirtualBackground = FeatureDetector.canVirtualBackground();
+    const storedVirtualBackground = DeviceManager.getStoredVirtualBackgroundType();
 
     this.state = {
       stream: null,
@@ -20,10 +24,12 @@ class Preview extends Component {
       microphones: [],
       selectedCamera: '',
       selectedMicrophone: '',
+      selectedVirtualBackground: storedVirtualBackground,
       enabledAudio: true,
-      enabledVideo: true
+      enabledVideo: true,
     };
     this.deviceManager = new DeviceManager();
+    this.deviceManager.setVirtualBackgroundType(storedVirtualBackground);
   }
 
   componentDidMount() {
@@ -94,10 +100,17 @@ class Preview extends Component {
     this.deviceManager.storeConstraints();
   };
 
+  onVirtualBackgroundChange = ({ target }) => {
+    const { value } = target;
+    this.setState({ selectedVirtualBackground: value });
+    this.deviceManager.setVirtualBackgroundType(value);
+  };
+
   onJoin = () => {
     const { enabledAudio: audio, enabledVideo: video } = this.state;
+    const virtualBackground = this.state.selectedVirtualBackground !== 'off';
     this.deviceManager.storeConstraints();
-    this.props.onJoin({ audio, video });
+    this.props.onJoin({ audio, video, virtualBackground });
   };
 
   onExit = () => {
@@ -105,7 +118,7 @@ class Preview extends Component {
   };
 
   render() {
-    const { stream, enabledAudio, enabledVideo, microphones, cameras, selectedMicrophone, selectedCamera } = this.state;
+    const { stream, enabledAudio, enabledVideo, microphones, cameras, selectedMicrophone, selectedCamera, selectedVirtualBackground } = this.state;
     return (
       <Card id="preview" className="page">
         <Typography use="headline4" tag="h4" className="page-title">Preview</Typography>
@@ -128,6 +141,14 @@ class Preview extends Component {
           </div>
           <Select options={cameras} onChange={this.onCamChange} value={selectedCamera} disabled={!enabledVideo} />
         </div>
+        {this.supportsVirtualBackground && (
+          <div className="device">
+            <div className="field">
+              <Typography use="caption" className="title">Virtual Background</Typography>
+            </div>
+            <Select options={virtualBackgroundOptions} onChange={this.onVirtualBackgroundChange} value={selectedVirtualBackground} />
+          </div>
+        )}
         <div className="buttons">
           <Button label="Cancel" outlined onClick={this.onExit} />
           &nbsp;

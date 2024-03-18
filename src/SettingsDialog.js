@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { DeviceManager } from 'eyeson';
+import { DeviceManager, FeatureDetector } from 'eyeson';
 import { Select } from '@rmwc/select';
 import { Dialog, DialogTitle, DialogContent, DialogActions, DialogButton } from '@rmwc/dialog';
 import { getSelectedDeviceId, mapDeviceList } from './utils.js';
+import virtualBackgroundOptions from './virtualBackgroundOptions.js';
+
+const supportsVirtualBackground = FeatureDetector.canVirtualBackground();
 
 const SettingsDialog = ({ open, onClose }) => {
     
@@ -12,6 +15,7 @@ const SettingsDialog = ({ open, onClose }) => {
   const [microphones, setMicrophones] = useState([]);
   const [selectedMicrophone, setSelectedMicrophone] = useState();
   const [selectedCamera, setSelectedCamera] = useState();
+  const [virtualBackground, setVirtualBackground] = useState(DeviceManager.getStoredVirtualBackgroundType());
 
   const handleClose = event => {
     let updateStream = false;
@@ -36,6 +40,12 @@ const SettingsDialog = ({ open, onClose }) => {
       setSelectedCamera(deviceId);
       deviceManager.current.setVideoInput(deviceId);
     }
+  };
+
+  const changeVirtualBackground = event => {
+    const selected = event.currentTarget.value;
+    setVirtualBackground(selected);
+    deviceManager.current.setVirtualBackgroundType(selected);
   };
 
   useEffect(() => {
@@ -64,6 +74,7 @@ const SettingsDialog = ({ open, onClose }) => {
       deviceManager.current = new DeviceManager();
       deviceManager.current.onChange(handleChange);
       deviceManager.current.start();
+      deviceManager.current.setVirtualBackgroundType(virtualBackground);
     }
     else if (deviceManager.current) {
       deviceManager.current.removeListener(handleChange);
@@ -94,6 +105,9 @@ const SettingsDialog = ({ open, onClose }) => {
           options={cameras}
           onChange={changeCamera}
         />
+        {supportsVirtualBackground && (
+          <Select label="Virtual Background" value={virtualBackground} options={virtualBackgroundOptions} onChange={changeVirtualBackground} />
+        )}
       </DialogContent>
       <DialogActions>
         <DialogButton outlined action="close">Cancel</DialogButton>

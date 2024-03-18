@@ -1,4 +1,4 @@
-import eyeson, { StreamHelpers, FeatureDetector } from 'eyeson';
+import eyeson, { StreamHelpers, FeatureDetector, DeviceManager } from 'eyeson';
 import { Component } from 'react';
 import { Grid, GridCell } from '@rmwc/grid';
 import { Tooltip } from '@rmwc/tooltip';
@@ -20,6 +20,7 @@ class Meeting extends Component {
       remoteStream: null,
       audio: mediaOptions.audio,
       video: mediaOptions.video,
+      virtualBackground: mediaOptions.virtualBackground,
       screen: false,
       settingsDialog: false,
       sfuMode: false,
@@ -32,10 +33,10 @@ class Meeting extends Component {
   }
 
   componentDidMount() {
-    const { audio, video } = this.state;
+    const { audio, video, virtualBackground } = this.state;
     this.props.setLoading(true);
     eyeson.onEvent(this.handleEvent);
-    eyeson.join({ audio, video });
+    eyeson.join({ audio, video, virtualBackground });
   }
 
   componentWillUnmount() {
@@ -106,13 +107,14 @@ class Meeting extends Component {
   };
 
   toggleVideo = () => {
-    const { audio, video, localStream } = this.state;
+    const { audio, video, localStream, virtualBackground } = this.state;
     const videoEnabled = !video;
     eyeson.send({
       type: 'change_stream',
       stream: localStream,
       video: videoEnabled,
-      audio: audio
+      audio: audio,
+      virtualBackground: virtualBackground !== 'off',
     });
     this.setState({ video: videoEnabled });
   };
@@ -138,10 +140,15 @@ class Meeting extends Component {
   closeSettings = (updateStream = false) => {
     this.setState({ settingsDialog: false });
     if (updateStream && !this.state.screen) {
+      const virtualBackground = DeviceManager.getStoredVirtualBackgroundType();
+      if (virtualBackground !== this.state.virtualBackground) {
+        this.setState({ virtualBackground });
+      }
       eyeson.send({
         type: 'start_stream',
         audio: this.state.audio,
-        video: this.state.video
+        video: this.state.video,
+        virtualBackground: virtualBackground !== 'off',
       });
     }
   };

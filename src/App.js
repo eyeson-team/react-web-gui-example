@@ -14,11 +14,13 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    eyeson.config.vbgScriptPath = 'react-web-gui-example/virtual-background/src/';
+
     this.state = {
       loading: false,
       connected: false,
       inPreview: true,
-      mediaOptions: { audio: true, video: true }
+      mediaOptions: { audio: true, video: true, virtualBackground: false }
     };
   }
 
