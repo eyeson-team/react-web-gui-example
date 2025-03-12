@@ -1,7 +1,7 @@
 
-# Eyeson Web GUI build with React
+# Eyeson Web GUI example built with React
 
-A minimal web gui for video meetings using [Eyeson]. The application
+A minimal web gui for video meetings using [Eyeson]. The example application
 demonstrates a very simple interface for [Eyeson] video meetings and can
 be used to host or integrate videos in any software. Create your own [api key]
 and enhance your products with powerful video meetings.
